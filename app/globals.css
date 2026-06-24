@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --surplus-black: #121a14;
+  --surplus-white: #ffffff;
+  --surplus-orange: #fbd46d;
+  --surplus-orange-dim: #dba512;
+  --surplus-grey: #336447e2;
+  --surplus-grey-text: #d3f2d3;
+  --surplus-green: #c8e6b8bd;
+
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--surplus-black);
+}
+
+body {
+  margin: 0;
+  background: var(--surplus-black);
+  color: var(--surplus-white);
+  font-family: var(--font-inter), sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--surplus-orange);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--surplus-orange);
+  color: #fff;
+}

@@ -1,0 +1,10 @@
+.next
+node_modules
+.env
+.env*.local
+dist
+coverage
+*.tsbuildinfo
+credentials*.json
+service-account*.json
+google-service-account*.json

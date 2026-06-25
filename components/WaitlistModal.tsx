@@ -8,6 +8,7 @@ import {
 } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { continueToWaitlistTelegram } from "@/lib/waitlistRedirect";
 
 export type FlowType = "vendor" | "buyer";
 
@@ -214,15 +215,10 @@ export function WaitlistModal({
 
     setRedirectUrl(result.telegramUrl);
     setSuccess(true);
-    if (result.telegramUrl) {
-      window.location.assign(result.telegramUrl);
-    }
   });
 
   const continueToTelegram = () => {
-    if (redirectUrl) {
-      window.location.assign(redirectUrl);
-    }
+    continueToWaitlistTelegram(redirectUrl, window.location.assign);
   };
 
   return (
@@ -425,15 +421,11 @@ function SuccessScreen({
       <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-surplus-grey-text">
         {isVendor ? "JOIN THE VENDOR COMMUNITY" : "JOIN THE SURPLUS COMMUNITY"}
       </p>
-      <p className="mx-auto mt-4 max-w-sm whitespace-pre-line text-sm leading-6 text-white">
+  
+      <p className="mx-auto mt-5 max-w-sm whitespace-pre-line text-xs leading-5 text-surplus-white">
         {isVendor
-          ? "Connect with other food vendors on Surplus.\nGet updates, tips, and be first to go live."
-          : "Get early deal alerts, launch updates, and your\ngift from the Surplus team when we go live in July."}
-      </p>
-      <p className="mx-auto mt-5 max-w-sm whitespace-pre-line text-xs leading-5 text-surplus-grey-text">
-        {isVendor
-          ? "You are about to be redirected to the Surplus Vendors\nTelegram channel, a private group for listed vendors only."
-          : "You are about to be redirected to the Surplus\nTelegram channel so you will be amongst the first\nto know and receive your gift when we launch in July."}
+          ? "Tap continue to join the Surplus Vendors Telegram channel,\na private group for listed vendors only."
+          : "Tap continue to join the Surplus Telegram channel\nso you will be amongst the first to know and receive\nyour gift when we launch in July."}
       </p>
 
       <button

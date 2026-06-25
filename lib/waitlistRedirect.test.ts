@@ -11,7 +11,7 @@ describe("scheduleWaitlistRedirect", () => {
 
     scheduleWaitlistRedirect("https://t.me/surplus", redirect);
 
-    vi.advanceTimersByTime(WAITLIST_TELEGRAM_REDIRECT_DELAY_MS - 1);
+    vi.advanceTimersByTime(WAITLIST_TELEGRAM_REDIRECT_DELAY_MS - 15);
     expect(redirect).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(1);
@@ -20,7 +20,7 @@ describe("scheduleWaitlistRedirect", () => {
     vi.useRealTimers();
   });
 
-  it("uses a 15 second default delay", () => {
-    expect(WAITLIST_TELEGRAM_REDIRECT_DELAY_MS).toBe(15000);
+  it("uses a 50 second default delay", () => {
+    expect(WAITLIST_TELEGRAM_REDIRECT_DELAY_MS).toBe(50000);
   });
 });

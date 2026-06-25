@@ -1,4 +1,4 @@
-export const WAITLIST_TELEGRAM_REDIRECT_DELAY_MS = 15000;
+export const WAITLIST_TELEGRAM_REDIRECT_DELAY_MS = 50000;
 
 export function scheduleWaitlistRedirect(
   url: string,

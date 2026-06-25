@@ -424,7 +424,7 @@ function SuccessScreen({
   
       <p className="mx-auto mt-5 max-w-sm whitespace-pre-line text-xs leading-5 text-surplus-white">
         {isVendor
-          ? "Tap continue to join the Surplus Vendors Telegram channel,\na private group for listed vendors only."
+          ? "Tap continue to join the Surplus Vendors Telegram channel,\na private support group for listed vendors only."
           : "Tap continue to join the Surplus Telegram channel\nso you will be amongst the first to know and receive\nyour gift when we launch in July."}
       </p>
 

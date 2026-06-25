@@ -83,7 +83,7 @@ export function LandingPage() {
           className="absolute inset-0"
           style={{
             backgroundColor:
-              "color-mix(in srgb, var(--surplus-black) 68%, transparent)"
+              "color-mix(in srgb, var(--surplus-black) 90%, transparent)"
           }}
           aria-hidden="true"
         />

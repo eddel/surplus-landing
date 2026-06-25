@@ -9,9 +9,10 @@ vi.mock("@/lib/googleSheets", () => ({
 describe("POST /api/waitlist", () => {
   beforeEach(() => {
     appendWaitlistRow.mockReset();
+    vi.unstubAllEnvs();
   });
 
-  it("appends vendor submissions with business in the shared details column", async () => {
+  it("appends vendor submissions with business and location in the shared details column", async () => {
     appendWaitlistRow.mockResolvedValue(undefined);
     const { POST } = await import("./route");
 
@@ -21,6 +22,7 @@ describe("POST /api/waitlist", () => {
         body: JSON.stringify({
           name: "Ada Okafor",
           business: "Bakery",
+          location: "Yaba, Lagos",
           phone: "08012345678",
           type: "vendor",
           timestamp: "2026-06-24T08:00:00.000Z"
@@ -28,12 +30,15 @@ describe("POST /api/waitlist", () => {
       })
     );
 
-    await expect(response.json()).resolves.toEqual({ success: true });
+    await expect(response.json()).resolves.toEqual({
+      success: true,
+      telegramUrl: undefined
+    });
     expect(response.status).toBe(200);
     expect(appendWaitlistRow).toHaveBeenCalledWith({
       timestamp: "2026-06-24T08:00:00.000Z",
       name: "Ada Okafor",
-      detail: "Bakery",
+      detail: "Bakery - Yaba, Lagos",
       phone: "08012345678",
       type: "Vendor"
     });
@@ -56,7 +61,10 @@ describe("POST /api/waitlist", () => {
       })
     );
 
-    await expect(response.json()).resolves.toEqual({ success: true });
+    await expect(response.json()).resolves.toEqual({
+      success: true,
+      telegramUrl: undefined
+    });
     expect(response.status).toBe(200);
     expect(appendWaitlistRow).toHaveBeenCalledWith({
       timestamp: "2026-06-24T08:00:00.000Z",
@@ -89,5 +97,30 @@ describe("POST /api/waitlist", () => {
       error: "Sheets unavailable"
     });
     expect(response.status).toBe(500);
+  });
+
+  it("returns the configured Telegram URL after Sheets append succeeds", async () => {
+    appendWaitlistRow.mockResolvedValue(undefined);
+    vi.stubEnv("NEXT_PUBLIC_TELEGRAM_VENDOR_URL", "https://t.me/surplusvendors");
+    const { POST } = await import("./route");
+
+    const response = await POST(
+      new Request("http://localhost/api/waitlist", {
+        method: "POST",
+        body: JSON.stringify({
+          name: "Ada Okafor",
+          business: "Bakery",
+          location: "Yaba, Lagos",
+          phone: "08012345678",
+          type: "vendor"
+        })
+      })
+    );
+
+    await expect(response.json()).resolves.toEqual({
+      success: true,
+      telegramUrl: "https://t.me/surplusvendors"
+    });
+    expect(response.status).toBe(200);
   });
 });

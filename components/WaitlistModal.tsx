@@ -82,6 +82,7 @@ export function WaitlistModal({
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
   const [apiError, setApiError] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState<string | undefined>();
   const [direction, setDirection] = useState(1);
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -92,10 +93,6 @@ export function WaitlistModal({
   const accentText = isVendor ? "text-surplus-green" : "text-surplus-orange";
   const accentBg = isVendor ? "bg-surplus-green" : "bg-surplus-orange";
   const accentHover = isVendor ? "hover:bg-[#23663F]" : "hover:bg-surplus-orange-dim";
-  const telegramUrl = isVendor
-    ? process.env.NEXT_PUBLIC_TELEGRAM_VENDOR_URL
-    : process.env.NEXT_PUBLIC_TELEGRAM_BUYER_URL;
-
   const {
     register,
     handleSubmit,
@@ -180,6 +177,7 @@ export function WaitlistModal({
       ? {
           name: values.name,
           business: values.business,
+          location: values.location,
           phone: values.phone,
           type: "vendor",
           timestamp: new Date().toISOString()
@@ -203,18 +201,25 @@ export function WaitlistModal({
       return;
     }
 
-    const result = (await response.json()) as { success?: boolean };
+    const result = (await response.json()) as {
+      success?: boolean;
+      telegramUrl?: string;
+    };
     if (!result.success) {
       setApiError(true);
       return;
     }
 
+    setRedirectUrl(result.telegramUrl);
     setSuccess(true);
+    if (result.telegramUrl) {
+      window.location.assign(result.telegramUrl);
+    }
   });
 
   const continueToTelegram = () => {
-    if (telegramUrl) {
-      window.open(telegramUrl, "_blank", "noopener,noreferrer");
+    if (redirectUrl) {
+      window.location.assign(redirectUrl);
     }
   };
 

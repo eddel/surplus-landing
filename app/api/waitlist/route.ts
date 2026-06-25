@@ -15,7 +15,9 @@ export async function POST(request: Request) {
     const payload = (await request.json()) as WaitlistPayload;
     const normalizedType = payload.type === "vendor" ? "Vendor" : "Buyer";
     const detail =
-      normalizedType === "Vendor" ? payload.business ?? "" : payload.location ?? "";
+      normalizedType === "Vendor"
+        ? [payload.business, payload.location].filter(Boolean).join(" - ")
+        : payload.location ?? "";
 
     await appendWaitlistRow({
       timestamp: payload.timestamp ?? new Date().toISOString(),
@@ -25,7 +27,12 @@ export async function POST(request: Request) {
       type: normalizedType
     });
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    const telegramUrl =
+      normalizedType === "Vendor"
+        ? process.env.TELEGRAM_VENDOR_URL ?? process.env.NEXT_PUBLIC_TELEGRAM_VENDOR_URL
+        : process.env.TELEGRAM_BUYER_URL ?? process.env.NEXT_PUBLIC_TELEGRAM_BUYER_URL;
+
+    return NextResponse.json({ success: true, telegramUrl }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(

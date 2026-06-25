@@ -53,6 +53,11 @@ describe("appendWaitlistRow", () => {
       },
       scopes: ["https://www.googleapis.com/auth/spreadsheets"]
     });
+    expect(append).toHaveBeenCalledWith(
+      expect.objectContaining({
+        range: "'Surplus Waitlist'!A:E"
+      })
+    );
   });
 
   it("accepts a base64 encoded service account JSON", async () => {
@@ -114,5 +119,32 @@ describe("appendWaitlistRow", () => {
       },
       scopes: ["https://www.googleapis.com/auth/spreadsheets"]
     });
+  });
+
+  it("uses the configured Google Sheets append range when provided", async () => {
+    vi.stubEnv("GOOGLE_CLIENT_EMAIL", "surplus@example.iam.gserviceaccount.com");
+    vi.stubEnv(
+      "GOOGLE_PRIVATE_KEY",
+      "-----BEGIN PRIVATE KEY-----\\nabc123\\n-----END PRIVATE KEY-----\\n"
+    );
+    vi.stubEnv("GOOGLE_SHEET_ID", "sheet-id");
+    vi.stubEnv("GOOGLE_SHEET_RANGE", "'Waitlist Responses'!A:E");
+    append.mockResolvedValue(undefined);
+
+    const { appendWaitlistRow } = await import("./googleSheets");
+
+    await appendWaitlistRow({
+      timestamp: "2026-06-24T08:00:00.000Z",
+      name: "Ada Okafor",
+      detail: "Bakery - Yaba, Lagos",
+      phone: "08012345678",
+      type: "Vendor"
+    });
+
+    expect(append).toHaveBeenCalledWith(
+      expect.objectContaining({
+        range: "'Waitlist Responses'!A:E"
+      })
+    );
   });
 });

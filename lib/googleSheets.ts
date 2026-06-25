@@ -10,6 +10,7 @@ export type WaitlistRow = {
 
 export async function appendWaitlistRow(row: WaitlistRow) {
   const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+  const range = process.env.GOOGLE_SHEET_RANGE ?? "'Surplus Waitlist'!A:E";
 
   if (!spreadsheetId) {
     throw new Error("Google Sheets environment variables are not configured");
@@ -26,7 +27,7 @@ export async function appendWaitlistRow(row: WaitlistRow) {
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range: "Surplus Waitlist!A:E",
+    range,
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [[row.timestamp, row.name, row.detail, row.phone, row.type]]

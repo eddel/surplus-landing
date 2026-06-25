@@ -81,7 +81,7 @@ export function WaitlistModal({
 }) {
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
-  const [apiError, setApiError] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [redirectUrl, setRedirectUrl] = useState<string | undefined>();
   const [direction, setDirection] = useState(1);
   const closeRef = useRef<HTMLButtonElement | null>(null);
@@ -160,19 +160,19 @@ export function WaitlistModal({
   const goNext = async () => {
     const valid = await trigger(current.field);
     if (!valid) return;
-    setApiError(false);
+    setApiError(null);
     setDirection(1);
     setStep((value) => Math.min(value + 1, steps.length - 1));
   };
 
   const goBack = () => {
-    setApiError(false);
+    setApiError(null);
     setDirection(-1);
     setStep((value) => Math.max(value - 1, 0));
   };
 
   const submit = handleSubmit(async (values) => {
-    setApiError(false);
+    setApiError(null);
     const payload = isVendor
       ? {
           name: values.name,
@@ -196,17 +196,19 @@ export function WaitlistModal({
       body: JSON.stringify(payload)
     });
 
-    if (!response.ok) {
-      setApiError(true);
-      return;
-    }
-
     const result = (await response.json()) as {
       success?: boolean;
       telegramUrl?: string;
+      error?: string;
     };
+
+    if (!response.ok) {
+      setApiError(result.error ?? "Something went wrong. Please try again.");
+      return;
+    }
+
     if (!result.success) {
-      setApiError(true);
+      setApiError(result.error ?? "Something went wrong. Please try again.");
       return;
     }
 
@@ -357,7 +359,7 @@ export function WaitlistModal({
 
               {apiError ? (
                 <p className="mt-4 text-center text-sm text-surplus-orange">
-                  Something went wrong. Please try again.
+                  {apiError}
                 </p>
               ) : null}
             </form>

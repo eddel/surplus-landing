@@ -100,7 +100,7 @@ export function LandingPage() {
             transition={{ duration: 0.45 }}
             className="mb-8 inline-flex w-fit rounded-full border border-surplus-orange px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-surplus-orange"
           >
-            Launching July 2026
+            Sell before e waste, Recover profits.
           </motion.div>
 
           <motion.h1

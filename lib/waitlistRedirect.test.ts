@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { continueToWaitlistTelegram } from "./waitlistRedirect";
+import {
+  continueToWaitlistTelegram,
+  continueToWaitlistTelegramInBrowser
+} from "./waitlistRedirect";
 
 describe("continueToWaitlistTelegram", () => {
   it("redirects only when a Telegram URL is available", () => {
@@ -16,5 +19,24 @@ describe("continueToWaitlistTelegram", () => {
     continueToWaitlistTelegram(undefined, redirect);
 
     expect(redirect).not.toHaveBeenCalled();
+  });
+
+  it("preserves the browser location receiver when redirecting", () => {
+    const location = {
+      redirectedTo: undefined as string | undefined,
+      assign(this: { redirectedTo?: string }, url: string) {
+        if (this !== location) {
+          throw new TypeError("Location.assign called with an invalid receiver");
+        }
+        this.redirectedTo = url;
+      }
+    };
+
+    continueToWaitlistTelegramInBrowser(
+      "https://t.me/surplusvendors",
+      location
+    );
+
+    expect(location.redirectedTo).toBe("https://t.me/surplusvendors");
   });
 });

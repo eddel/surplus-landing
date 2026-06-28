@@ -8,7 +8,7 @@ import {
 } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { continueToWaitlistTelegram } from "@/lib/waitlistRedirect";
+import { continueToWaitlistTelegramInBrowser } from "@/lib/waitlistRedirect";
 
 export type FlowType = "vendor" | "buyer";
 
@@ -218,7 +218,7 @@ export function WaitlistModal({
   });
 
   const continueToTelegram = () => {
-    continueToWaitlistTelegram(redirectUrl, window.location.assign);
+    continueToWaitlistTelegramInBrowser(redirectUrl, window.location);
   };
 
   return (

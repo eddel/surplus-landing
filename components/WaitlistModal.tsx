@@ -47,8 +47,8 @@ const vendorSteps: StepConfig[] = [
   },
   {
     field: "location",
-    question: "What city or area are you in?",
-    placeholder: "e.g. Lagos, Abuja, Port Harcourt, Calabar...",
+    question: "What city and area are you in?",
+    placeholder: "e.g. Lagos (lekki), Lagos (surulere)",
     helper: "We'll notify buyers in your area."
   }
 ];
@@ -61,8 +61,8 @@ const buyerSteps: StepConfig[] = [
   },
   {
     field: "location",
-    question: "What city or area are you in?",
-    placeholder: "e.g. Lagos, Abuja, Port Harcourt, Calabar...",
+    question: "What city and area are you in?",
+    placeholder: "e.g. Lagos (lekki), Lagos (surulere)",
     helper: "We'll notify you when vendors in your area go live."
   },
   {
